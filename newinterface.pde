@@ -69,7 +69,7 @@ void BUTTONS() {
   strokeWeight(2);
   b0 = cp5.addButton("START")
          .setValue(1)
-         .setPosition(width-150, 250)
+         .setPosition(width-150, 385)
          .setSize(130, 50)
          .setColorBackground(color(255,0,0))
          .setColorForeground(Yellow)
@@ -99,35 +99,36 @@ void BUTTONS() {
 void PORT(){
  // SCROLLABLE LIST
  // Get a list of available port names
+  ScrollableList portList;
+  cp5 = new ControlP5(this);
+
   String[] portNames = Serial.list();
-  // Iterate over the port names
-  for (int i=0;i<portNames.length;i++) {
+
+  portList = cp5.addScrollableList("AVAILABLE PORTS")
+                .setPosition(width - 170, 275)
+                .setSize(400, 700)
+                .setItemHeight(22)
+                .setBarHeight(20)
+                .setBackgroundColor(0)
+                .setColorBackground(255)
+                .setColorActive(color(255, 0, 0))
+                .setFont(createFont("Arial", 12))
+                .setOpen(false);
+
+  for (String portName : portNames) {
     try {
-      // Open the serial port
-      Serial port = new Serial(this, portNames[i],203400);
-      // Replace baudrate with the appropriate one for your device
-      println("Device is connected to port: " + portNames[i]);
-      i++;
-        s1 = cp5.addScrollableList("AVAILABLE PORTS")
-           .setPosition(width-170, 325)
-           .setSize(200, 100)
-           .addItems(portNames)
-           .setItemHeight(22)
-           .setBarHeight(20)
-           .setBackgroundColor(0)
-           .setColorBackground(255)
-           .setColorActive(color(255,0,0))
-           .setFont(f2)
-           .setOpen(false);
-     // Close the port
+      Serial port = new Serial(this, portName, 9600); // Replace baud rate with the appropriate one for your device
+      println("Device is connected to port: " + portName);
       port.stop();
-    }
-    catch (Exception e) {
-      println("PORT BUSY: " + portNames[i]);
+      portList.addItem(portName, 0);
+    } catch (Exception e) {
+      println("Port is busy: " + portName);
       e.printStackTrace();
     }
   }
 }
+
+
 void COM(int n) {
   println("ScrollableList event: " + n + ", " + cp5.get(ScrollableList.class, "COM").getItem(n).get("name"));
   drawInterface();
@@ -147,8 +148,8 @@ class MySketch extends PApplet {
   public void setup() {
   size(1350,860);
   smooth();
-  myPort = new Serial(this,"COM12",230400);
-  // OR myPort = new Serial(this,Serial.list()[0],230400);
+  //myPort = new Serial(this,"COM4",230400);
+    myPort = new Serial(this,Serial.list()[0],230400);
   for (int i = 0; i < rpm.length; i++) {
     rpm[i] = 0;
     speed[i] = 0;
@@ -412,3 +413,4 @@ text(S,0,-1);
 popMatrix();
 }
 }
+
