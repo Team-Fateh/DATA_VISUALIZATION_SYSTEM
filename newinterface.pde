@@ -1,7 +1,5 @@
-import processing.video.*;
 import controlP5.*;
 import processing.serial.*;
-Movie movie; //declared a Movie object.
 
 ControlP5 cp5; //instance of ControlP5 class created through ControlP5's constructor.
 
