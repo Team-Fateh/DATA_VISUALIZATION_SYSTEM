@@ -6,7 +6,7 @@ Movie movie; //declared a Movie object.
 ControlP5 cp5; //instance of ControlP5 class created through ControlP5's constructor.
 
 ScrollableList portList;
-Button b0,b1,b2;
+Button b0;
 
 PFont f1, f2;
 PImage logo;
@@ -28,7 +28,7 @@ int[] yAccel1= new int[240];
 
 PFont italicFont;
 PImage img;
-int i=0;
+int Numberoflistitems=0;
 float offset = 0;
 float easing = 0.05;
 boolean linkSketched = false;
@@ -68,14 +68,14 @@ void drawInterface() {
   stroke(#FFF303);
   strokeWeight(10);
   fill(0);
-  rect(600,200,400,400);
+  rect(600,150,400,550);
 }
 
 void BUTTONS() {
   strokeWeight(2);
   b0 = cp5.addButton("START")
          .setValue(1)
-         .setPosition(width/2+40, 385)
+         .setPosition(width/2+40, 535)
          .setSize(130, 50)
          .setColorBackground(#FFF303)
          .setCaptionLabel("START")
@@ -94,7 +94,7 @@ void BUTTONS() {
 );
   b0 = cp5.addButton("EXIT")
          .setValue(2)
-          .setPosition(width/2+40, 455)
+          .setPosition(width/2+40, 595)
          .setSize(130, 50)
          .setColorBackground(#FFF303)
          .setCaptionLabel("EXIT")
@@ -139,8 +139,8 @@ void PORT(){
       Serial port = new Serial(this, portName, 230400); // Replace baud rate with the appropriate one for your device.
       println("Device is connected to port: " + portName);
       port.stop();
-      portList.addItem(portName,i);
-    i++;
+      portList.addItem(portName,Numberoflistitems);
+   Numberoflistitems++;
     //COM(i);
 }
 catch (Exception e) {
@@ -148,8 +148,8 @@ catch (Exception e) {
       e.printStackTrace();
     }
   }
-  if(i==0){
-  portList.addItem("NO PORT AVAILABLE",i);
+  if(Numberoflistitems==0){
+  portList.addItem("NO PORT AVAILABLE",Numberoflistitems);
   }
 }
 
@@ -158,7 +158,7 @@ catch (Exception e) {
 
 void buttonClicked(String buttonName) {
   if (buttonName.equals("START")) {//.equals() compare the contents of two String objects
-   if(i!=0){
+   if(Numberoflistitems!=0){
  int selectedIndex = (int) portList.getValue();  
  String selected = portList.getItem((int) selectedIndex).get("name").toString();
  portInUse=selected;
