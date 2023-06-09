@@ -16,6 +16,24 @@ String p;
 
 int gaugeValue;
 int[] values = new int[18];
+//values[0]=millis
+//values[1]=RPM
+//values[2]=temp
+//values[3]=gear
+//values[4]=speed
+//values[5]=brakepressure
+//values[6]=BatteryVoltage
+//values[7]=radiator
+//values[8]=datalogging
+//values[9]=throttle position
+//values[10]=braketemp
+//values[11]=frontleftloadcell
+//values[12]=frontrightloadcell
+//values[13]=rearleftloadcell
+//values[14]=rearrightloadcell
+//values[15]=accelerometer x-axis
+//values[16]=accelerometer y-axis
+//values[17]=Steering angle
 int[] speed = new int[615];
 int[] rpm = new int[615];
 int[] brakepressure = new int[315];
@@ -222,8 +240,8 @@ background(0);
   int randValue2 = values[5];//BRAKEpressure
   int randValue3 = values[9];//THROTTLE
   int randValue4 = values[10];//breaktemp
-  int randValue5 = values[15];//circulargraphX
-  int randValue6 = values[16];//circulargraphY
+  int randValue5 = values[15];//accelerometerX-axis
+  int randValue6 = values[16];//accelerometerY-axis
   for (int i = 0; i < rpm.length-1; i++) {
     rpm[i] = rpm[i+1];
     speed[i]=speed[i+1];
@@ -245,7 +263,6 @@ background(0);
   yAccel[yAccel.length-1] = randValue6;
   xAccel1[xAccel1.length-1] = int(map(randValue5,0,1023,-50,50));
   yAccel1[yAccel1.length-1] = int(map(randValue6,0,1023,-50,50));
-  int dataValue1 = values[1];
     GAUGE(980,height-150,values[4],"SPEED",150);
     GAUGE(1225,height-150,values[1],"RPM",11000);
     GRAPH(615,170,speed,"SPEED",20,10,150);
@@ -253,8 +270,8 @@ background(0);
     GRAPH2(315,85,xAccel1,yAccel1,"G's",30,290,50);
     BAR(800,height-170, values[5],"BreakPressure",100);
     G(values[15],values[16],100,520);
-    ONOFF(200,520,values[7],"R");
-    ONOFF(300,520,values[8],"D");
+    ONOFF(200,520,values[7],"R");//RADIATOR
+    ONOFF(300,520,values[8],"D");//DATALOGGING
     RAWDATA(1150,250);
     stroke(255);
     line(0,height-275,width,height-275);
@@ -264,9 +281,6 @@ background(0);
     rect(945,220,400,365);
     textAlign(CENTER,CENTER);
     fill(255);
-    //textSize(20);
-    //text("ENGINE",215,480);
-    //text("DATA",310,480);
     textSize(50);
     text("GEAR",100,670);
     textSize(30);
