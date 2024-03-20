@@ -1,5 +1,11 @@
-import controlP5.*;
+import processing.video.*;
 import processing.serial.*;
+import controlP5.*;
+import java.io.PrintWriter;
+
+Capture video;
+
+PrintWriter output;
 
 ControlP5 cp5; //instance of ControlP5 class created through ControlP5's constructor.
 
@@ -12,9 +18,7 @@ PImage logo;
 Serial myPort;//instance of Serial class created.
 
 String portInUse=null;
-String p;
 
-int gaugeValue;
 int[] values = new int[18];
 //values[0]=millis
 //values[1]=RPM
@@ -34,16 +38,15 @@ int[] values = new int[18];
 //values[15]=accelerometer x-axis
 //values[16]=accelerometer y-axis
 //values[17]=Steering angle
-int[] speed = new int[615];
-int[] rpm = new int[615];
+int[] speed = new int[600];
+int[] rpm = new int[600];
 int[] brakepressure = new int[315];
-int[] xAccel = new int[240];
-int[] yAccel= new int[240];
-int[] xAccel1 = new int[240];
-int[] yAccel1= new int[240];
+int[] xAccel = new int[400];
+int[] yAccel= new int[400];
+//int[] xAccel1 = new int[400];
+//int[] yAccel1= new int[400];
 
-PFont italicFont;
-PImage img;
+PImage Background;
 int Numberoflistitems=0;
 float offset = 0;
 float easing = 0.05;
@@ -51,54 +54,48 @@ boolean linkSketched = false;
 boolean isRunning=true;
 
 void setup() {
-  size(1350,700);
-  //movie = new Movie(this, "bootscreen 2.mp4");//Initialize Movie object.
+  size(width,height);
   cp5 = new ControlP5(this);//Passed reference to the current sketch object
   surface.setTitle("TEAM FATEH GUI SYSTEM"); //sets the title of the Processing window to "TEAM FATEH GUI SYSTEM". 
   logo = loadImage("LOGO.jpg");// Load an image into the program
-  img=loadImage("B.jpg");
+  Background=loadImage("B.jpg");
   f1 = createFont("AdobeGothicStd-Bold", 30, true);
   f2 = createFont("Arial", 12);
-   //movie.loop();
-  image(img,0,0,width,height);
+  image(Background,0,0,width,height);
 drawInterface();
 BUTTONS();
 PORT();
 }
 
-void draw() {
+void draw() {}
 
-
-}
-
-void drawInterface() {
+void drawInterface(){
   smooth();
   surface.setIcon(logo);//sets the icon of the Processing window to the image specified by the logo variable.
-  image(logo, width - 100, 0, 100, 100);
+  image(logo, width - 240, 0,width-1110,height-650);
 
   textFont(f1);
   fill(#FFF303);
   textAlign(CENTER);
   textSize(50);
-  text("TEAM FATEH GUI SYSTEM", width / 2+200, 100);
+  text("TEAM FATEH GUI SYSTEM", width / 2+150, height-750);
   stroke(#FFF303);
   strokeWeight(10);
   fill(0);
-  rect(600,150,400,550);
+  rect(width/2-90,height-700,400,550);
 }
 
 void BUTTONS() {
   strokeWeight(2);
   b0 = cp5.addButton("START")
-         .setValue(1)
-         .setPosition(width/2+40, 535)
+         .setPosition(width/2+40,height-325)
          .setSize(130, 50)
          .setColorBackground(#FFF303)
          .setCaptionLabel("START")
          .setColorLabel(color(0))
          .setColorActive(#FFF303)
-         .setColorForeground(0)
-         .setFont(createFont("AdobeGothicStd-Bold",25));
+         .setColorForeground(0);
+         //.setFont(createFont("AdobeGothicStd-Bold",25));
  b0.addListener(
  new ControlListener() {
     public void controlEvent(ControlEvent event) {
@@ -108,16 +105,16 @@ void BUTTONS() {
     }
   }
 );
+
   b0 = cp5.addButton("EXIT")
-         .setValue(2)
-          .setPosition(width/2+40, 595)
+          .setPosition(width/2+40,height-265)
          .setSize(130, 50)
          .setColorBackground(#FFF303)
          .setCaptionLabel("EXIT")
          .setColorLabel(color(0))
          .setColorActive(#FFF303)
-         .setColorForeground(0)
-         .setFont(createFont("AdobeGothicStd-Bold",25));
+         .setColorForeground(0);
+         //.setFont(createFont("AdobeGothicStd-Bold",25));
  b0.addListener(
  new ControlListener() { 
     //The ControlListener interface is part of the controlP5 library and it defines a method called controlEvent().
@@ -146,7 +143,7 @@ void PORT(){
                 .setColorBackground(0)// Sets the background color of the list items.
                 .setColorActive(0)
                 .setColorValueLabel(#FFF303)
-                .setFont(createFont("AdobeGothicStd-Bold",20))
+                //.setFont(createFont("AdobeGothicStd-Bold",20))
                 .setOpen(false);
                 
 
@@ -157,11 +154,9 @@ void PORT(){
       port.stop();
       portList.addItem(portName,Numberoflistitems);
    Numberoflistitems++;
-    //COM(i);
 }
 catch (Exception e) {
       println("Port is busy: " + portName);
-      e.printStackTrace();
     }
   }
   if(Numberoflistitems==0){
@@ -195,12 +190,15 @@ class MySketch extends PApplet {
   //MySketch class defines the behavior and drawing functions of the sketch.
   //By extending the PApplet class, the MySketch class inherits all the functionality and methods provided by the PApplet class.
   public void settings(){
-  size(1350,860);
+  size(1350,860);  
   }
   public void setup() {
   size(1350,860);
   smooth();
-  myPort = new Serial(this,portInUse,230400);//Initialized myPort 
+  output=createWriter("C:\\Users\\pratham\\Desktop\\FATEH\\DATA_VISUALIZATION_SYSTEM\\data.csv");
+  //video=new Capture(this,Capture.list()[0]);
+  //video.start();
+  myPort = new Serial(this,portInUse,57600);//Initialized myPort 
   cp5=new ControlP5(this);
   for (int i = 0; i < rpm.length; i++) {
     rpm[i] = 0;
@@ -212,18 +210,33 @@ class MySketch extends PApplet {
   for (int i = 0; i < xAccel.length; i++) {
     xAccel[i] = 0;
     yAccel[i] = 0;
-    xAccel1[i] = 0;
-    yAccel1[i] = 0;
+    //xAccel1[i] = 0;
+    //yAccel1[i] = 0;
   }
-  runButton(625,height-250);
-  pauseButton(625,height-190);
+  runButton(width-730,height-250);
+  pauseButton(width-730,height-190);
   }
 public void draw(){
 if(isRunning){
-background(0);
-  image(logo,450,220,400,365);
+ background(0);
+ //if(video.available()){
+ //  video.read();
+ //}
+ //float targetWidth = width;
+ //float targetHeight = targetWidth * 1 / 2.1; // Change the aspect ratio here
+ // Calculate the scale factor for width and height
+ //float scaleX = targetWidth / video.width;
+ //float scaleY = targetHeight / video.height; 
+ // Apply the scale transformation
+ //pushMatrix();
+ //scale(scaleX, scaleY);  
+ // Display the video frame
+ //image(video, 215, 205, 216, 210);  
+ //popMatrix();
+ image(logo,470,220,400,365);
   if (myPort.available() > 0) {
     String input = myPort.readStringUntil('\n');
+    output.println(input);
     println(input);
     if (input != null) {
      String[] valuesStr = split(input.trim(), ",");
@@ -252,8 +265,8 @@ background(0);
     for (int i = 0; i < xAccel.length-1; i++) {
     xAccel[i] = xAccel[i+1];
     yAccel[i] = yAccel[i+1];
-    xAccel1[i] = xAccel1[i+1];
-    yAccel1[i] = yAccel1[i+1];
+    //xAccel1[i] = xAccel1[i+1];
+    //yAccel1[i] = yAccel1[i+1];
   }
   
   speed[speed.length-1] = randValue1;
@@ -261,41 +274,42 @@ background(0);
   brakepressure[brakepressure.length-1]=randValue2;
   xAccel[xAccel.length-1] = randValue5;
   yAccel[yAccel.length-1] = randValue6;
-  xAccel1[xAccel1.length-1] = int(map(randValue5,0,1023,-50,50));
-  yAccel1[yAccel1.length-1] = int(map(randValue6,0,1023,-50,50));
-    GAUGE(980,height-150,values[4],"SPEED",150);
+  //xAccel1[xAccel1.length-1] = int(map(randValue5,0,1023,-3,3));
+  //yAccel1[yAccel1.length-1] = int(map(randValue6,0,1023,-3,3));
+    GAUGE(980,height-160,values[4],"SPEED",150);
     GAUGE(1225,height-150,values[1],"RPM",11000);
-    GRAPH(615,170,speed,"SPEED",20,10,150);
-    GRAPH(615,170,rpm,"RPM",680,10,11000);
-    GRAPH2(315,85,xAccel1,yAccel1,"G's",30,290,50);
-    BAR(800,height-170, values[5],"BreakPressure",100);
-    G(values[15],values[16],100,520);
-    ONOFF(200,520,values[7],"R");//RADIATOR
-    ONOFF(300,520,values[8],"D");//DATALOGGING
+    GRAPH(600,150,speed,"SPEED",20,10,150);
+    GRAPH(600,150,rpm,"RPM",690,10,11000);
+    GRAPH2(400,85,xAccel,yAccel,"G's",30,240,3);
+    BAR(800,height-170, values[5],"BREAK PRESSURE",100);
+    G(values[15],values[16],200,500);
+    ONOFF(width-300,540,values[7],"R");//RADIATOR
+    ONOFF(width-100,540,values[8],"D");//DATALOGGING
     RAWDATA(1150,250);
-    stroke(255);
-    line(0,height-275,width,height-275);
-    line(0,220,width,220);
-    noFill();
-    rect(5,220,400,365);
-    rect(945,220,400,365);
     textAlign(CENTER,CENTER);
     fill(255);
     textSize(50);
-    text("GEAR",100,670);
+    text("GEAR",100,600);
     textSize(30);
-    text("Battery",500,600);
-    text("EngineTemp",320,600);
+    text("BATTERY VOLT",510,600);
+    text("ENGINE TEMP",320,600);
     textSize(70);
     fill(255, 204, 0);
-    text(values[3],100,620);
+    if(values[3]==0){
+      text("N",100,650);
+    }
+    else{
+        text(values[3],100,650);
+    }
     textSize(50);
-    text("G's",170,250);
-    text("'C",350,650);
+    text("°C",350,650);
     text("V",515,650);
     text(values[2],300,650);
     text(values[6],480,650);
-}
+    textSize(30);
+    text("G's",170,220);
+    noFill();
+}            
 }
 public void GAUGE(int X,int Y,int value,String label,int maxvalue){
 strokeWeight(25);
@@ -344,22 +358,27 @@ public void GRAPH2(float w, float h, int[] data,int[] data2, String label, int x
   pushMatrix();
   translate(x,y);
   int i=0, x1=0, x2 = 0, y1=0, y2 = 0;
+  int j=0, x3=0, x4 = 0, y3=0, y4 = 0;
   int pointInterval = int(w / data.length);
   strokeWeight(2);
   stroke(255, 204, 0);
   for (i = 1; i < data.length; i++) {
+    println(x1);
+    println(y1);
     x1 =(i-1) * pointInterval;
     y1 = int(h - (data[i-1] *h / maxValue));
     x2 =i * pointInterval;
     y2 = int(h - (data[i] *h / maxValue));
     line(x1, y1, x2, y2);
   }
-  for (i = 1; i < data2.length; i++) {
-    x1 =(i-1) * pointInterval;
-    y1 = int(h - (data2[i-1] *h / maxValue));
-    x2 =i * pointInterval;
-    y2 = int(h - (data2[i] *h / maxValue));
-    line(x1, y1, x2, y2);
+  int pointInterval2 = int(w / data2.length);
+  stroke(255);
+  for (j = 1; j < data2.length; j++) {
+    x3 =(j-1) * pointInterval2;
+    y3 = int(h - (data2[j-1] *h / maxValue));
+    x4 =j * pointInterval2;
+    y4 = int(h - (data2[j] *h / maxValue));
+    line(x3, y3, x4, y4);
   }
   fill(255, 204, 0);
   textSize(20);
@@ -389,7 +408,7 @@ public void BAR(float x, float y, int value, String label, int maxValue){
   textSize(30);
   text(value, 0,10);
   textSize(20);
-  text(label, 0,30);
+  text(label, 20,30);
   popMatrix();
 }
 public void G(int v1,int v2,int X,int Y){
@@ -397,11 +416,11 @@ public void G(int v1,int v2,int X,int Y){
   translate(X,Y);
   noFill();
   stroke(255);
+  ellipse(0,0,150,150);
   ellipse(0,0,100,100);
-  ellipse(0,0,75,75);
   ellipse(0,0,50,50);
-  line(0,-50,0,50);
-  line(-50,0,50,0);
+  line(0,-75,0,75);
+  line(-75,0,75,0);
   noStroke();
   fill(255, 204, 0);
   ellipse(v1,v2,10,10);
@@ -415,63 +434,68 @@ public void RAWDATA(int X,int Y){
   fill(255, 204, 0);
    textAlign(CENTER,CENTER);
    textSize(50);
-    text("RAWDATA",0,0);
+    text("RAWDATA",0,5);
     fill(255);
     textSize(20);
     textAlign(LEFT);
-    text("millis-",-170,50);
-    text("Speed-",-170,70);
-    text("RPM-",-170,100);
-    text("Throttle-",-170,130);
-    text("BATTERY-",-170,160);
-    text("EngineTemp-",-170,190);
-    text("Gear-",-170,220);
-    text("BrakePressure-",-170,250);
-    text("G in YDir-",-170,280);
-    text("G in XDir-",-170,310);
+    text("MILLIS-",-210,70);
+    text("SPEED-",-210,110);
+    text("RPM-",-210,150);
+    text("BRAKEPRESSURE-",-210,180);
+    text("BATTERY VOLT-",-210,220);
+    text("ENGINE TEMP-",20,70);
+    text("GEAR-",20,110);
+    //text("THROTTLE",20,150);
+    text("G(X)-",20,150);
+    text("G(Y)-",20,180);
     textAlign(LEFT);
     fill(255, 204, 0);
-    text(values[0],-40,50);
-    text(values[4],-40,70);
-    text(values[1],-40,100);
-    text(values[9],-40,130);
-    text(values[6],-40,160);
-    text(values[2],-40,190);
-    text(values[3],-40,220);
-    text(values[5],-40,250);
-    text(values[16],-40,280);
-    text(values[15],-40,310);
+    text(values[0],-50,70);
+    text(values[4],-50,110);
+    text(values[1],-50,150);
+    text(values[5],-50,180);
+    text(values[6],-50,220);
+    text(values[2],170,70);
+    if(values[3]==0){
+      text("N",170,110);
+    }
+    else{
+        text(values[3],170,110);
+    }
+    //text(values[9],170,150);
+    text(values[16],170,150);
+    text(values[15],170,180);
     popMatrix();
 }
 public void ONOFF(int x,int y,int value,String S){
 pushMatrix();
 translate(x,y);
 if(value==0){
-stroke(255);
+stroke(0);
 fill(255,0,0);
-ellipse(0,0,40,40);
-fill(255);
-textSize(20);
-text(S,0,-1);
+ellipse(0,0,70,70);
+fill(0);
+textSize(30);
+text(S,0,-4);
 }
 else{
-stroke(255);
+stroke(0);
 fill(#1AC918);
-ellipse(0,0,40,40);
-fill(255);
-textSize(20);
-text(S,0,-1);
+ellipse(0,0,70,70);
+fill(0);
+textSize(30);
+text(S,0,-4);
 }
 popMatrix();
 }
 
-void runButton(int xPosition,int yPosition){
+public void runButton(int xPosition,int yPosition){
 b0=cp5.addButton("RUN")
 .setValue(1)
 .setPosition(xPosition,yPosition)
 .setSize(100,50)
 .setCaptionLabel("RUN")
-.setFont(createFont("AdobeFanHeitiStd-Bold", 16)) // Set font size and style 
+//.setFont(createFont("AdobeFanHeitiStd-Bold", 16)) // Set font size and style 
  .setColorBackground(color(255, 204, 0))
          .setColorForeground(0)
          .setColorActive(color(255, 204, 0));
@@ -486,13 +510,13 @@ b0.addListener(
 );
 }
 
-void pauseButton(int xPosition,int yPosition){
+public void pauseButton(int xPosition,int yPosition){
 b0=cp5.addButton("PAUSE")
 .setValue(2)
 .setPosition(xPosition,yPosition)
 .setSize(100,50)
 .setCaptionLabel("PAUSE")
-.setFont(createFont("AdobeFanHeitiStd-Bold", 16))// Set font size and style 
+//.setFont(createFont("AdobeFanHeitiStd-Bold", 16))// Set font size and style 
  .setColorBackground(color(255, 204, 0))
          .setColorForeground(0)
          .setColorActive(color(255, 204, 0));
@@ -507,11 +531,11 @@ b0.addListener(
 );
 }
 
-void run(){
+public void run(){
   isRunning=true;
 }
 
-void pause(){
+public void pause(){
   isRunning=false;
 }
 }
