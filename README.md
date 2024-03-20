@@ -266,3 +266,5 @@ This system is designed keeping in mind the requirements to improve the performa
 Have also been represented.
 
 The final GUI System looks like this:
+
+![Interface (2)](https://github.com/Team-Fateh/DATA_VISUALIZATION_SYSTEM/assets/118990719/4491f2da-6e68-46ed-aa88-fe3e04fa21c3)
