@@ -58,7 +58,7 @@ void setup() {
   cp5 = new ControlP5(this);//Passed reference to the current sketch object
   surface.setTitle("TEAM FATEH GUI SYSTEM"); //sets the title of the Processing window to "TEAM FATEH GUI SYSTEM". 
   logo = loadImage("LOGO.jpg");// Load an image into the program
-  Background=loadImage("B.jpg");
+  Background=loadImage("BackGround.jpg");
   f1 = createFont("AdobeGothicStd-Bold", 30, true);
   f2 = createFont("Arial", 12);
   image(Background,0,0,width,height);
