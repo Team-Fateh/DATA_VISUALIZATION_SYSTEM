@@ -14,6 +14,8 @@ Capture video;
 PImage steer;
 PImage roll;
 PImage pitch;
+PImage tire;
+PImage tire_side_view;
 PrintWriter output;
 
 Serial myPort;
@@ -74,6 +76,8 @@ void setup(){
   steer=loadImage("Steer.png");
   roll=loadImage("image_roll.png");
   pitch=loadImage("image_pitch.png");
+  tire=loadImage("tire.png");
+  tire_side_view=loadImage("tire_side_view.png");
   arcLayer=createGraphics(width,height);
   arcLayer.beginDraw();
   arcLayer.background(255, 165, 0);
@@ -134,8 +138,7 @@ void draw(){
   dash(730,495,randspeed,randrpm,apps,bp,int(values[28]));
   Pitch(750,665,values[16],pitch,"Pitch",10);
   Roll(1150,665,values[17],roll,"Roll",10);
-  strokeWeight(5);
-  line(775,685,775,655);
+
 
 }
 
@@ -228,7 +231,7 @@ void drawHalfGauge(int x, int y, int value, String label, int maxValue, String t
 }
 
 void Pitch(int x,int y,float value,PImage img,String label,int maxValue){
-  float angle=map(value,0,maxValue,-1,1);
+  float angle=map(value,0,maxValue,-0.5,0.5);
   float RadAng=radians(angle);
   pushMatrix();
   translate(x,y);
@@ -242,12 +245,19 @@ void Pitch(int x,int y,float value,PImage img,String label,int maxValue){
    arc(55,10,150,10,-PI,map(value,-maxValue,0,-PI/2,0));
    pop();
   }
+  push();
+  stroke(255);
+  strokeWeight(5);
+  line(25,-10,25,20);
+  pop();
   textAlign(CENTER, CENTER);
   textSize(20);
   text(label, 0, -30);
   textFont(customFont);
   textSize(30);
   text(value, 60, -30);
+  image(tire,-80,100,50,50);
+  image(tire,120,100,50,50);
   rotate(RadAng);
   imageMode(CENTER);
   image(img,0,90,300,300);
@@ -269,15 +279,24 @@ void Roll(int x,int y,float value,PImage img,String label,int maxValue){
    arc(55,10,150,10,-PI,map(value,-maxValue,0,-PI/2,0));
    pop();
   }
+  push();
+  stroke(255);
+  strokeWeight(5);
+  line(25,-10,25,20);
+  pop();
   textAlign(CENTER, CENTER);
   textSize(20);
   text(label, 0, -30);
   textFont(customFont);
   textSize(30);
   text(value, 60, -30);
+  image(tire_side_view,70,70,25,25);
+  image(tire_side_view,0,70,25,25);
+  image(tire_side_view,92,120,50,50);
+  image(tire_side_view,-25,120,50,50);
   rotate(RadAng);
   imageMode(CENTER);
-  image(img,30,100,200,200);
+  image(img,30,90,150,150);
   popMatrix();
 }
 
