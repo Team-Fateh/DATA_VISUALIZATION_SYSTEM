@@ -27,13 +27,13 @@ void loop(){
   Serial.print(",");
   Serial.print("0");//datalogging
   Serial.print(",");
-  Serial.print(random(0,100));//damper_FL
+  Serial.print(random(-100,100));//damper_FL
   Serial.print(",");
-  Serial.print(random(0,100));//damper_FR
+  Serial.print(random(-100,100));//damper_FR
   Serial.print(",");
-  Serial.print(random(0,100));//damper_RL
+  Serial.print(random(-100,100));//damper_RL
   Serial.print(",");
-  Serial.print(random(0,100));//damper_RR
+  Serial.print(random(-100,100));//damper_RR
   Serial.print(",");
   Serial.print(random(-10,10));//pitch
   Serial.print(",");
@@ -47,9 +47,9 @@ void loop(){
   Serial.print(",");
   Serial.print(random(0,200));//RR_loadcell
   Serial.print(",");
-  Serial.print(random(0,3));//Ax
+  Serial.print(random(-3,3));//Ax
   Serial.print(",");
-  Serial.print(random(0,3));//Ay
+  Serial.print(random(-3,3));//Ay
   Serial.print(",");
   Serial.print(random(0,100));//SOC
   Serial.print(",");
