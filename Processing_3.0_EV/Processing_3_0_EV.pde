@@ -127,20 +127,21 @@ void draw(){
   current[current.length-1] = randcurrent;
   Ax[Ax.length-1] = randAx;
   Ay[Ay.length-1]=randAy;
-  dash(730,495,randspeed,randrpm,apps,bp,int(values[28]));
-  Pitch(770,665,values[16],pitch,"Pitch:",10);
-  Roll(1150,665,values[17],roll,"Roll:",10);
+  dash(680,495,randspeed,randrpm,apps,bp,int(values[28]));
+  Pitch(750,665,values[16],pitch,"Pitch:",10);
+  Roll(1100,665,values[17],roll,"Roll:",10);
   textFont(customFont);
   textSize(25);
-  text("DAMPLER\nTRAVEL", 1000,900);
-  dampertravel(750,870,FL_d,"FL:",100);
-  dampertravel(1200,870,FR_d,"FR:",100);
-  dampertravel(750,950,RL_d,"RL:",100);
-  dampertravel(1200,950,RR_d,"RR:",100);
+  text("DAMPLER\nTRAVEL", 950,900);
+  dampertravel(700,870,FL_d,"FL:",100);
+  dampertravel(1150,870,FR_d,"FR:",100);
+  dampertravel(700,950,RL_d,"RL:",100);
+  dampertravel(1150,950,RR_d,"RR:",100);
   drawGraphf(240, 125, speed, "Speed", 50, 325, 100, 292, 92, 0, 5, 0);
   drawGraph(240, 125, rpm, "RPM", 50, 525, 3000, 292, 92, 0, 5, 0);
-  drawGraphf(240, 100, Ax, "", 50, 745, 5, 255, 165, 0, 5, 1);
-  drawGraphf(240, 100, Ay, "", 50, 745, 5, 220, 0, 0, 5, 1);
+  drawGraphf(240, 100, Ax, "", 50, 725, 5, 255, 165, 0, 5, 1);
+  drawGraphf(240, 100, Ay, "", 50, 725, 5, 220, 0, 0, 5, 1);
+  circularGraph(values[22],values[23],1500,500);
 }
 
 void dash(int x,int y, float speedVal, int rpmVal, int APPSVal, int BPVal, int SteerAngVal){
@@ -149,7 +150,7 @@ void dash(int x,int y, float speedVal, int rpmVal, int APPSVal, int BPVal, int S
   strokeWeight(5);
   stroke(292, 92, 0);
   arc(250,-170,600,20,-PI,0);
-  arc(250,120,600,20,-PI,0);
+  arc(250,120,700,20,-PI,0);
   drawGaugef(25,0,speedVal,"Speed",100);
   drawGauge(505,0,rpmVal,"RPM",3000);
   drawHalfGauge(290,0,BPVal,"BrakePress",50,"Left");
@@ -401,7 +402,7 @@ void drawGraphf(float w, float h, float[] data, String label, int xOffset, int y
   textSize(20);
   for (i = 0; i <= time; i++) {
     line(int((96.25 * i)), -10, int((96.25 * i)), h + 10);
-    text(i - time, int((96.25 * i)), h + 20);
+    text(i - time, int((96.25 * i))+10, h + 30);
   }
   if (flag==1) {
     line(0, 2*h, x2, 2*h);
@@ -412,6 +413,24 @@ void drawGraphf(float w, float h, float[] data, String label, int xOffset, int y
     text("G's", x2 -250, -20);
     flag=0;
   }
+  popMatrix();
+}
+
+public void circularGraph(float v1,float v2,int X,int Y){
+  pushMatrix();
+  translate(X,Y);
+  noFill();
+  stroke(292,92,0);
+  ellipse(0,0,150,150);
+  ellipse(0,0,100,100);
+  ellipse(0,0,50,50);
+  line(0,-75,0,75);
+  line(-75,0,75,0);
+  noStroke();
+  fill(255);
+  ellipse(v1,v2,20,20);
+  fill(255);
+  textSize(50);
   popMatrix();
 }
 
