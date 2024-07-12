@@ -131,10 +131,11 @@ void draw(){
   current[current.length-1] = randcurrent;
   Ax[Ax.length-1] = randAx;
   Ay[Ay.length-1]=randAy;
-  dash(730,545,randspeed,randrpm,apps,bp,int(values[28]));
-  Pitch(750,765,values[16],pitch,"pitch",10);
+  dash(730,495,randspeed,randrpm,apps,bp,int(values[28]));
+  Pitch(750,665,values[16],pitch,"Pitch",10);
+  Roll(1150,665,values[17],roll,"Roll",10);
   strokeWeight(5);
-  line(775,725,775,695);
+  line(775,685,775,655);
 
 }
 
@@ -227,24 +228,59 @@ void drawHalfGauge(int x, int y, int value, String label, int maxValue, String t
 }
 
 void Pitch(int x,int y,float value,PImage img,String label,int maxValue){
-  float angle=map(value,0,maxValue,-3,3);
+  float angle=map(value,0,maxValue,-1,1);
   float RadAng=radians(angle);
   pushMatrix();
   translate(x,y);
+  stroke(292, 92, 0);
   if(value>0){
-    arc(105,-50,150,10,-PI,map(value,0,maxValue,-PI/2,0));
+    arc(105,10,150,10,-PI,map(value,0,maxValue,-PI/2,0));
   }
   else{
    push();
    scale(-1,1);
-   arc(55,-50,150,10,-PI,map(value,-maxValue,0,-PI/2,0));
+   arc(55,10,150,10,-PI,map(value,-maxValue,0,-PI/2,0));
    pop();
   }
+  textAlign(CENTER, CENTER);
+  textSize(20);
+  text(label, 0, -30);
+  textFont(customFont);
+  textSize(30);
+  text(value, 60, -30);
   rotate(RadAng);
   imageMode(CENTER);
-  image(img,0,30,300,300);
+  image(img,0,90,300,300);
   popMatrix();
 }
+
+void Roll(int x,int y,float value,PImage img,String label,int maxValue){
+  float angle=map(value,0,maxValue,-1,1);
+  float RadAng=radians(angle);
+  pushMatrix();
+  translate(x,y);
+  stroke(292, 92, 0);
+  if(value>0){
+    arc(105,10,150,10,-PI,map(value,0,maxValue,-PI/2,0));
+  }
+  else{
+   push();
+   scale(-1,1);
+   arc(55,10,150,10,-PI,map(value,-maxValue,0,-PI/2,0));
+   pop();
+  }
+  textAlign(CENTER, CENTER);
+  textSize(20);
+  text(label, 0, -30);
+  textFont(customFont);
+  textSize(30);
+  text(value, 60, -30);
+  rotate(RadAng);
+  imageMode(CENTER);
+  image(img,30,100,200,200);
+  popMatrix();
+}
+
 void captureEvent(Capture video) {
   video.read();
 }
