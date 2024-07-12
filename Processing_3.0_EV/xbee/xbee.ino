@@ -53,12 +53,14 @@ void loop(){
   Serial.print(",");
   Serial.print(random(0,100));//SOC
   Serial.print(",");
-  Serial.print(random(0,200));//TS_Temp
+  Serial.print(random(0,150));//TS_Temp
   Serial.print(",");
   Serial.print(random(0,4));//TS_Current
   Serial.print(",");
   Serial.print(random(0,300));//TS_voltage
   Serial.print(",");
-  Serial.println(random(-90,90));//steering_angle
+  Serial.print(random(-90,90));//steering_angle
+  Serial.print(",");
+  Serial.println(random(0,80));//Power to motor
   delay(100);
 }

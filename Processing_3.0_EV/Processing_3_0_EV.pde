@@ -11,7 +11,7 @@ PImage tire_side_view;
 PrintWriter output;
 
 Serial myPort;
-float[] values=new float[29];
+float[] values=new float[30];
 float[] speed=new float[240];
 int[] rpm= new int[240];
 int [] TS_Temp=new int[240];
@@ -47,7 +47,7 @@ float [] Ay=new float[240];
 //values[26]=TS_Current
 //values[27]=TS_Voltage
 //values[28]=steering_angle
-
+//values[29]=power
 PFont customFont;
 
 void setup(){
@@ -91,7 +91,7 @@ void draw(){
     if (input != null) {
       //output.println(input);  
       String[] valuesStr = split(input.trim(), ",");
-      if (valuesStr.length==29) {
+      if (valuesStr.length==30) {
         for (int i = 0; i < values.length; i++) {
           values[i] = float(valuesStr[i]);
         }
@@ -100,8 +100,8 @@ void draw(){
   }
   float randspeed=values[7];
   int randrpm=int(values[1]);
-  int randTS_Temp=int(values[19]);
-  int randcurrent=int(values[20]);
+  int randTS_Temp=int(values[25]);
+  int randcurrent=int(values[26]);
   int FL_d=int(values[12]);
   int FR_d=int(values[13]);
   int RL_d=int(values[14]);
@@ -137,11 +137,16 @@ void draw(){
   dampertravel(1150,870,FR_d,"FR:",100);
   dampertravel(700,950,RL_d,"RL:",100);
   dampertravel(1150,950,RR_d,"RR:",100);
-  drawGraphf(240, 125, speed, "Speed", 50, 325, 100, 292, 92, 0, 5, 0);
-  drawGraph(240, 125, rpm, "RPM", 50, 525, 3000, 292, 92, 0, 5, 0);
-  drawGraphf(240, 100, Ax, "", 50, 725, 5, 255, 165, 0, 5, 1);
-  drawGraphf(240, 100, Ay, "", 50, 725, 5, 220, 0, 0, 5, 1);
-  circularGraph(values[22],values[23],1500,500);
+  drawGraphf(240, 95, speed, "Speed", 50, 320, 100, 292, 92, 0, 5, 0);
+  drawGraph(240, 95, rpm, "RPM", 50, 470, 3000, 292, 92, 0, 5, 0);
+  drawGraphf(240, 75, Ax, "", 50, 625, 5, 255, 165, 0, 5, 1);
+  drawGraphf(240, 75, Ay, "", 50, 625, 5, 220, 0, 0, 5, 1);
+  circularGraph(values[22],values[23],390,890);
+  drawGraph(240, 75,TS_Temp, "TS_Temp", 1375, 50, 150, 292, 92, 0, 5, 0);
+  drawGraph(240, 75,current, "Curr", 1375, 200, 4, 292, 92, 0, 5, 0);
+  drawBar(1400, 500,int(values[24]),"SOC",100);
+  drawBar(1500, 500,int(values[29]),"Power",80);
+  //drawGraph();
 }
 
 void dash(int x,int y, float speedVal, int rpmVal, int APPSVal, int BPVal, int SteerAngVal){
@@ -356,7 +361,7 @@ void drawGraph(float w, float h, int[] data, String label, int xOffset, int yOff
   textSize(20);
   text(data[i-1], x2 + 30, y2 - 5);
   textSize(25);
-  text(label, x2-250, -20);
+  text(label, x2-230, -20);
   stroke(255);
   line(0, 0, x2, 0);
   line(0, h, x2, h);
@@ -371,7 +376,7 @@ void drawGraph(float w, float h, int[] data, String label, int xOffset, int yOff
       line(int((96.25 * i)), h-10, int((96.25 * i)), 2*h + 10);
     }
     textSize(25);
-    text("G's", x2 + 65, 95);
+    text("G's", x2 + 75, 95);
     flag=0;
   }
   popMatrix();
@@ -395,7 +400,7 @@ void drawGraphf(float w, float h, float[] data, String label, int xOffset, int y
   textSize(20);
   text(data[i-1], x2 + 30, y2 - 5);
   textSize(25);
-  text(label, x2-250, -20);
+  text(label, x2-230, -20);
   stroke(255);
   line(0, 0, x2, 0);
   line(0, h, x2, h);
@@ -431,6 +436,21 @@ public void circularGraph(float v1,float v2,int X,int Y){
   ellipse(v1,v2,20,20);
   fill(255);
   textSize(50);
+  popMatrix();
+}
+
+void drawBar(int x, int y, int value, String label, int maxValue) {
+  pushMatrix();
+  translate(x, y);
+  float barHeight = map(value, 0, maxValue, 0, 130);
+  noStroke();
+  fill(292,92, 0);
+  rect(0 - 20, -barHeight, 40, barHeight);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  fill(255);
+  text(value, 0, -barHeight-30);
+  text(label, 0, 20);
   popMatrix();
 }
 
