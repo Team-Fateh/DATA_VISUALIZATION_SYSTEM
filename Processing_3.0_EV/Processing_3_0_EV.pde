@@ -8,6 +8,7 @@ PImage roll;
 PImage pitch;
 PImage tire;
 PImage tire_side_view;
+PImage LOGO;
 PrintWriter output;
 
 Serial myPort;
@@ -70,6 +71,8 @@ void setup(){
   pitch=loadImage("image_pitch.png");
   tire=loadImage("tire.png");
   tire_side_view=loadImage("tire_side_view.png");
+  LOGO=loadImage("LOGO.jpg");
+
 }
 
 void draw(){
@@ -83,7 +86,8 @@ void draw(){
   pushMatrix();
   scale(scaleX, scaleY);  
   // Display the video frame
-  image(video, 310, 80, 200, 150);  
+  //  image(video, 310, 80, 200, 150);  
+  image(LOGO, 305, 80, 200, 200);  
   popMatrix();
   if (myPort.available()>0) {
     String input = myPort.readStringUntil('\n');
