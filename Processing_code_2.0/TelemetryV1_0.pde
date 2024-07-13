@@ -8,7 +8,7 @@ PImage img;
 PrintWriter output;
 
 Serial myPort;
-float[] values = new float[18];
+float[] values = new float[30];
 int[] rpm = new int[385];
 float[] speed = new float[385];
 int[] brakePress = new int[385];
@@ -66,7 +66,7 @@ void draw() {
     if (input != null) {
       output.println(input);  
       String[] valuesStr = split(input.trim(), ",");
-      if (valuesStr.length==29) {
+      if (valuesStr.length==30) {
         for (int i = 0; i < values.length; i++) {
           values[i] = float(valuesStr[i]);
         }

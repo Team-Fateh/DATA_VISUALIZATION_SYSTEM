@@ -1,5 +1,5 @@
 void setup(){
-  Serial.begin(230400);
+  Serial.begin(9600);
 }
 
 void loop(){
