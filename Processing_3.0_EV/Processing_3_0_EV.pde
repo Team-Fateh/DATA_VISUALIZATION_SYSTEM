@@ -53,8 +53,8 @@ PFont customFont;
 void setup(){
   size(1920,990);
   smooth();
-  //video=new Capture(this,Capture.list()[0]);
-  //video.start();
+  video=new Capture(this,Capture.list()[0]);
+  video.start();
   myPort=new Serial(this,Serial.list()[2],230400)  ;
   for(int i=0;i<speed.length;i++){
     speed[i]=0;
@@ -74,17 +74,17 @@ void setup(){
 
 void draw(){
   background(0);
-//  float targetWidth = width;
-//  float targetHeight = targetWidth * 1 / 2.1; // Change the aspect ratio here this ensures images and videos are displayed without distortion.
-//  // Calculate the scale factor for width and height
-//  float scaleX = targetWidth / video.width;
-//  float scaleY = targetHeight / video.height; 
-//  // Apply the scale transformation
-//  pushMatrix();
-//  scale(scaleX, scaleY);  
-//  // Display the video frame
-//  image(video, 215, 205, 216, 210);  
-//  popMatrix();
+  float targetWidth = width;
+  float targetHeight = targetWidth * 1 / 2.1; // Change the aspect ratio here this ensures images and videos are displayed without distortion.
+  // Calculate the scale factor for width and height
+  float scaleX = targetWidth / video.width;
+  float scaleY = targetHeight / video.height; 
+  // Apply the scale transformation
+  pushMatrix();
+  scale(scaleX, scaleY);  
+  // Display the video frame
+  image(video, 310, 80, 200, 150);  
+  popMatrix();
   if (myPort.available()>0) {
     String input = myPort.readStringUntil('\n');
     println(input);
