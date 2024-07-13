@@ -1,5 +1,5 @@
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(230400);
 }
 
 void loop(){
@@ -25,7 +25,7 @@ void loop(){
   Serial.print(",");
   Serial.print(random(0,100));//throttle position
   Serial.print(",");
-  Serial.print("0");//datalogging
+  Serial.print(1);//datalogging
   Serial.print(",");
   Serial.print(random(-100,100));//damper_FL
   Serial.print(",");

@@ -11,7 +11,7 @@ PImage tire_side_view;
 PrintWriter output;
 
 Serial myPort;
-float[] values=new float[29];
+float[] values=new float[30];
 float[] speed=new float[240];
 int[] rpm= new int[240];
 int [] TS_Temp=new int[240];
@@ -55,7 +55,7 @@ void setup(){
   smooth();
   //video=new Capture(this,Capture.list()[0]);
   //video.start();
-  myPort=new Serial(this,Serial.list()[0],9600);  
+  myPort=new Serial(this,Serial.list()[2],230400)  ;
   for(int i=0;i<speed.length;i++){
     speed[i]=0;
     rpm[i]=0;
@@ -85,15 +85,13 @@ void draw(){
 //  // Display the video frame
 //  image(video, 215, 205, 216, 210);  
 //  popMatrix();
-  println(myPort.available());
-  println(Serial.list());
   if (myPort.available()>0) {
     String input = myPort.readStringUntil('\n');
     println(input);
     if (input != null) {
       //output.println(input);  
       String[] valuesStr = split(input.trim(), ",");
-      if (valuesStr.length==29) {
+      if (valuesStr.length==30) {
         for (int i = 0; i < values.length; i++) {
           values[i] = float(valuesStr[i]);
         }
@@ -147,7 +145,13 @@ void draw(){
   drawGraph(240, 75,TS_Temp, "TS_Temp", 1375, 50, 150, 292, 92, 0, 5, 0);
   drawGraph(240, 75,current, "Curr", 1375, 200, 4, 292, 92, 0, 5, 0);
   drawBar(1400, 500,int(values[24]),"SOC",100);
-  //drawBar(1500, 500,int(values[29]),"Power",80);
+  drawBar(1500, 500,int(values[29]),"Power",80);
+  ONOFF(250,900,int(values[11]),"D");
+  Dataf(100,900,values[9],"V","LVBattery","Voltage");
+  Data(1630,400,int(values[26]),"A","Discharge Current");
+  Data(1800,400,int(values[27]),"°C","Ts_Temp");
+  Data(1630,500,int(values[24]),"%","SOC");
+  Data(1800,500,int(values[29]),"W","Power");
   //drawGraph();
 }
 
@@ -454,6 +458,54 @@ void drawBar(int x, int y, int value, String label, int maxValue) {
   text(value, 0, -barHeight-30);
   text(label, 0, 20);
   popMatrix();
+}
+
+void ONOFF(int x,int y,int value,String S){
+  pushMatrix();
+  translate(x,y);
+  push();
+  if(value==0){
+  stroke(255);
+  fill(255,0,0);
+  ellipse(0,0,70,70);
+  fill(0);
+  textSize(30);
+  text(S,1,-1);
+}
+else{
+  stroke(255);
+  fill(0,255,0);
+  ellipse(0,0,70,70);
+  fill(0);
+  textSize(30);
+  text(S,1,-1);
+  }
+  pop();
+  popMatrix();
+}
+
+void Dataf(int x,int y,float value,String unit,String label,String label2){
+  textFont(customFont);
+  textSize(30);
+  push();
+  fill(293,92,0);
+  text(value, x, y-20);
+  pop();
+  textSize(25);
+  text(label+"\n"+label2, x, y+30);
+  text(unit, x+50, y-20);
+}
+
+void Data(int x,int y,int value,String unit,String label){
+  textFont(customFont);
+  textSize(30);
+  push();
+  fill(293,92,0);
+  text(value, x, y-20);
+  pop();
+  textSize(25);
+  text(label, x, y+30);
+  text(unit, x+35, y-20);
 }
 
 void captureEvent(Capture video) {
