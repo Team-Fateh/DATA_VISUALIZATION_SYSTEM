@@ -9,6 +9,7 @@ PImage pitch;
 PImage tire;
 PImage tire_side_view;
 PImage LOGO;
+PImage F1;
 PrintWriter output;
 
 Serial myPort;
@@ -72,7 +73,7 @@ void setup(){
   tire=loadImage("tire.png");
   tire_side_view=loadImage("tire_side_view.png");
   LOGO=loadImage("LOGO.jpg");
-
+  F1=loadImage("F1.png");
 }
 
 void draw(){
@@ -82,7 +83,7 @@ void draw(){
   // Calculate the scale factor for width and height
   float scaleX = targetWidth / video.width;
   float scaleY = targetHeight / video.height; 
-  // Apply the scale transformation
+   //Apply the scale transformation
   pushMatrix();
   scale(scaleX, scaleY);  
   // Display the video frame
@@ -141,13 +142,13 @@ void draw(){
   dampertravel(1150,870,FR_d,"FR:",100);
   dampertravel(700,950,RL_d,"RL:",100);
   dampertravel(1150,950,RR_d,"RR:",100);
-  drawGraphf(240, 95, speed, "Speed", 50, 320, 100, 292, 92, 0, 5, 0);
-  drawGraph(240, 95, rpm, "RPM", 50, 470, 3000, 292, 92, 0, 5, 0);
+  drawGraphf(240, 95, speed, "Speed", 50, 320, 100, 255, 165, 0, 5, 0);
+  drawGraph(240, 95, rpm, "RPM", 50, 470, 3000, 255, 165, 0, 5, 0);
   drawGraphf(240, 75, Ax, "", 50, 625, 5, 255, 165, 0, 5, 1);
   drawGraphf(240, 75, Ay, "", 50, 625, 5, 220, 0, 0, 5, 1);
   circularGraph(values[22],values[23],390,890);
-  drawGraph(240, 75,TS_Temp, "TS_Temp", 1375, 50, 150, 292, 92, 0, 5, 0);
-  drawGraph(240, 75,current, "Curr", 1375, 200, 4, 292, 92, 0, 5, 0);
+  drawGraph(240, 75,TS_Temp, "TS_Temp", 1375, 50, 150, 255, 165, 0, 5, 0);
+  drawGraph(240, 75,current, "Curr", 1375, 200, 4, 255, 165, 0, 5, 0);
   drawBar(1400, 500,int(values[24]),"SOC",100);
   drawBar(1500, 500,int(values[29]),"Power",80);
   ONOFF(250,900,int(values[11]),"D");
@@ -156,6 +157,12 @@ void draw(){
   Data(1800,400,int(values[27]),"°C","Ts_Temp");
   Data(1630,500,int(values[24]),"%","SOC");
   Data(1800,500,int(values[29]),"W","Power");
+  speed_load(1225,390,F1,400,400);
+  textSize(50);
+  push();
+  fill(255,165,0);
+  text("GPS coming soon",300,100);
+  pop();
   //drawGraph();
 }
 
@@ -163,7 +170,7 @@ void dash(int x,int y, float speedVal, int rpmVal, int APPSVal, int BPVal, int S
   pushMatrix();
   translate(x,y);
   strokeWeight(5);
-  stroke(292, 92, 0);
+  stroke(255, 165, 0);
   arc(250,-170,600,20,-PI,0);
   arc(250,120,700,20,-PI,0);
   drawGaugef(25,0,speedVal,"Speed",100);
@@ -201,7 +208,7 @@ void drawGaugef(int x, int y, float value, String label, int maxValue) {
   translate(x, y);
   noFill();
   strokeWeight(15);
-  stroke(292, 92, 0);
+  stroke(255, 165, 0);
   arc(0, 0, 150, 150, -PI, map(value, 0, maxValue, -PI, 0));
   textAlign(CENTER, CENTER);
   textSize(20);
@@ -217,7 +224,7 @@ void drawGauge(int x, int y, int value, String label, int maxValue) {
   translate(x, y);
   noFill();
   strokeWeight(15);
-  stroke(292, 92, 0);
+  stroke(255, 165, 0);
   arc(0, 0, 150, 150, -PI, map(value, 0, maxValue, -PI, 0));
   textAlign(CENTER, CENTER);
   textSize(20);
@@ -264,7 +271,7 @@ void Pitch(int x,int y,float value,PImage img,String label,int maxValue){
   float RadAng=radians(angle);
   pushMatrix();
   translate(x,y);
-  stroke(292, 92, 0);
+  stroke(255, 165, 0);
   if(value>0){
     arc(105,10,150,10,-PI,map(value,0,maxValue,-PI/2,0));
   }
@@ -298,7 +305,7 @@ void Roll(int x,int y,float value,PImage img,String label,int maxValue){
   float RadAng=radians(angle);
   pushMatrix();
   translate(x,y);
-  stroke(292, 92, 0);
+  stroke(255, 165, 0);
   if(value>0){
     arc(105,10,150,10,-PI,map(value,0,maxValue,-PI/2,0));
   }
@@ -441,9 +448,9 @@ public void circularGraph(float v1,float v2,int X,int Y){
   ellipse(0,0,50,50);
   line(0,-75,0,75);
   line(-75,0,75,0);
-  noStroke();
-  fill(255);
-  ellipse(v1,v2,20,20);
+  stroke(255, 165, 0);
+  strokeWeight(17);
+  point(map(v1, -3, 3, 55, -55), map(v2, -3, 3,55, -55));
   fill(255);
   textSize(50);
   popMatrix();
@@ -454,8 +461,30 @@ void drawBar(int x, int y, int value, String label, int maxValue) {
   translate(x, y);
   float barHeight = map(value, 0, maxValue, 0, 130);
   noStroke();
-  fill(292,92, 0);
+  fill(255, 165, 0);
   rect(0 - 20, -barHeight, 40, barHeight);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  fill(255);
+  text(value, 0, -barHeight-30);
+  text(label, 0, 20);
+  popMatrix();
+}
+
+void drawBarf(int x, int y, float value, String label, int maxValue,int flag) {
+  pushMatrix();
+  translate(x, y);
+  float barHeight = map(value, 0, maxValue, 0, 100);
+  noStroke();
+  if (flag==0){
+    fill(255, 165, 0);
+    rect(0 - 20, -barHeight, 40, barHeight);
+  }
+  else{
+    fill(255,0,0);
+    rect(0 - 20, -barHeight, 40, barHeight);
+  }
+  noFill();
   textAlign(CENTER, CENTER);
   textSize(30);
   fill(255);
@@ -492,7 +521,7 @@ void Dataf(int x,int y,float value,String unit,String label,String label2){
   textFont(customFont);
   textSize(30);
   push();
-  fill(293,92,0);
+  fill(255, 165, 0);
   text(value, x, y-20);
   pop();
   textSize(25);
@@ -504,7 +533,7 @@ void Data(int x,int y,int value,String unit,String label){
   textFont(customFont);
   textSize(30);
   push();
-  fill(293,92,0);
+  fill(255, 165, 0);
   text(value, x, y-20);
   pop();
   textSize(25);
@@ -512,6 +541,21 @@ void Data(int x,int y,int value,String unit,String label){
   text(unit, x+35, y-20);
 }
 
-void captureEvent(Capture video) {
-  video.read();
+void speed_load(int x,int y,PImage img,int Sx,int Sy){
+  pushMatrix();
+  translate(x,y);
+  drawBarf(275,320,values[3],"Sp_FL",100,0);
+  drawBarf(525, 320,values[4],"Sp_FR",100,0);
+  drawBarf(275, 525,values[5],"Sp_RL",100,0);
+  drawBarf(525, 525,values[6],"Sp_RR",100,0);
+  drawBarf(175, 320,values[18],"LC_FL",200,1);
+  drawBarf(625, 320,values[19],"LC_FR",200,1);
+  drawBarf(175, 525,values[20],"LC_RL",200,1);
+  drawBarf(625, 535,values[21],"LC_RR",200,1);
+  image(img,Sx,Sy,Sx,Sy);
+  popMatrix();
 }
+
+//void captureEvent(Capture video) {
+//  video.read();
+//}
