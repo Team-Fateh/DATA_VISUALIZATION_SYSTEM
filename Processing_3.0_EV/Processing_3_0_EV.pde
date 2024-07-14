@@ -86,8 +86,8 @@ void draw(){
    //Apply the scale transformation
   pushMatrix();
   scale(scaleX, scaleY);  
-  // Display the video frame
-  //  image(video, 310, 80, 200, 150);  
+   //Display the video frame
+    //image(video, 310, 80, 200, 150);  
   image(LOGO, 305, 80, 200, 200);  
   popMatrix();
   if (myPort.available()>0) {
@@ -137,7 +137,7 @@ void draw(){
   Roll(1100,665,values[17],roll,"Roll:",10);
   textFont(customFont);
   textSize(25);
-  text("DAMPLER\nTRAVEL", 950,900);
+  text("DAMPER\nTRAVEL", 950,900);
   dampertravel(700,870,FL_d,"FL:",100);
   dampertravel(1150,870,FR_d,"FR:",100);
   dampertravel(700,950,RL_d,"RL:",100);
@@ -551,11 +551,11 @@ void speed_load(int x,int y,PImage img,int Sx,int Sy){
   drawBarf(175, 320,values[18],"LC_FL",200,1);
   drawBarf(625, 320,values[19],"LC_FR",200,1);
   drawBarf(175, 525,values[20],"LC_RL",200,1);
-  drawBarf(625, 535,values[21],"LC_RR",200,1);
+  drawBarf(625, 525,values[21],"LC_RR",200,1);
   image(img,Sx,Sy,Sx,Sy);
   popMatrix();
 }
 
-//void captureEvent(Capture video) {
-//  video.read();
-//}
+void captureEvent(Capture video) {
+  video.read();
+}
