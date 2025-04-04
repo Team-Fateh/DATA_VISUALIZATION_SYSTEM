@@ -1,6 +1,7 @@
 void setup(){
   Serial.begin(230400);
 }
+#include"WiFi.h"
 
 void loop(){
   Serial.print(millis());
