@@ -267,8 +267,11 @@ Have also been represented.
 
 The final GUI System looks like this:
 
+
 ![Interface (2)](https://github.com/Team-Fateh/DATA_VISUALIZATION_SYSTEM/assets/118990719/4491f2da-6e68-46ed-aa88-fe3e04fa21c3)
 
-New Version(Processing3.0V)
+
+<h3>New Version of FSAE Telemetry for Electric Vehicle(Please refer to Processing_3.0_EV)</h3>
+
 
 ![Alt Text](Preview_New_Version.png)
