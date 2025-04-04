@@ -1,4 +1,4 @@
-import processing.serial.*;
+`import processing.serial.*;
 import processing.video.*;
 import java.io.PrintWriter;
 
@@ -57,7 +57,7 @@ void setup(){
   smooth();
   video=new Capture(this,Capture.list()[0]);
   video.start();
-  myPort=new Serial(this,Serial.list()[2],230400)  ;
+  myPort=new Serial(this,Serial.list()[2],230400);
   for(int i=0;i<speed.length;i++){
     speed[i]=0;
     rpm[i]=0;
@@ -161,7 +161,7 @@ void draw(){
   textSize(50);
   push();
   fill(255,165,0);
-  text("GPS coming soon",300,100);
+  //text("GPS coming soon",300,100);
   pop();
   //drawGraph();
 }

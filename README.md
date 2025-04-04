@@ -1,4 +1,5 @@
 # DATA VISUALIZATION SYSTEM
+<h2>Refer to New version(Processing_3.0_EV)</h2>
 
 Data visualization is the representation of data through use of common graphics, such as charts, plots, infographics, and even animations. After going through and analyzing all of the scenarios, the one we hand-pick is the Processing Language. Processing is a programming language and environment designed for creating visual and interactive applications.
 
@@ -267,4 +268,11 @@ Have also been represented.
 
 The final GUI System looks like this:
 
+
 ![Interface (2)](https://github.com/Team-Fateh/DATA_VISUALIZATION_SYSTEM/assets/118990719/4491f2da-6e68-46ed-aa88-fe3e04fa21c3)
+
+
+<h3>New Version of FSAE Telemetry for Electric Vehicle(Please refer to Processing_3.0_EV)</h3>
+
+
+![Alt Text](Preview_New_Version.png)
